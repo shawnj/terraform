@@ -38,6 +38,7 @@ resource "azurerm_public_ip" "pip" {
   domain_name_label            = "${var.dns_name}"
 }
 
+
 resource "azurerm_storage_account" "stor" {
   name                     = "${var.dns_name}stor"
   location                 = "${var.location}"
@@ -52,7 +53,7 @@ resource "azurerm_managed_disk" "datadisk" {
   resource_group_name  = "${azurerm_resource_group.rg.name}"
   storage_account_type = "Standard_LRS"
   create_option        = "Empty"
-  disk_size_gb         = "1023"
+  disk_size_gb         = "40"
 }
 
 resource "azurerm_virtual_machine" "vm" {
@@ -61,6 +62,9 @@ resource "azurerm_virtual_machine" "vm" {
   resource_group_name   = "${azurerm_resource_group.rg.name}"
   vm_size               = "${var.vm_size}"
   network_interface_ids = ["${azurerm_network_interface.nic.id}"]
+
+  delete_data_disks_on_termination = true
+  delete_os_disks_on_termination = true
 
   storage_image_reference {
     publisher = "${var.image_publisher}"
@@ -80,7 +84,7 @@ resource "azurerm_virtual_machine" "vm" {
     name              = "${var.hostname}-datadisk"
     managed_disk_id   = "${azurerm_managed_disk.datadisk.id}"
     managed_disk_type = "Standard_LRS"
-    disk_size_gb      = "1023"
+    disk_size_gb      = "100"
     create_option     = "Attach"
     lun               = 0
   }
@@ -90,13 +94,12 @@ resource "azurerm_virtual_machine" "vm" {
     admin_username = "${var.admin_username}"
     admin_password = "${var.admin_password}"
   }
-
-  os_profile_linux_config {
-    disable_password_authentication = false
+  
+  os_profile_windows_config {
+    #winrm = ""
   }
 
-  boot_diagnostics {
-    enabled     = true
-    storage_uri = "${azurerm_storage_account.stor.primary_blob_endpoint}"
+  tags{
+    environment = "staging"
   }
 }

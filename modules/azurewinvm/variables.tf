@@ -17,7 +17,7 @@ variable "dns_name" {
 
 variable "location" {
   description = "The location/region where the virtual network is created. Changing this forces a new resource to be created."
-  default     = "southcentralus"
+  default     = "westus"
 }
 
 variable "virtual_network_name" {
@@ -32,7 +32,7 @@ variable "address_space" {
 
 variable "subnet_prefix" {
   description = "The address prefix to use for the subnet."
-  default     = "10.0.10.0/24"
+  default     = "10.0.2.0/24"
 }
 
 variable "storage_account_tier" {
@@ -47,22 +47,22 @@ variable "storage_replication_type" {
 
 variable "vm_size" {
   description = "Specifies the size of the virtual machine."
-  default     = "Standard_A0"
+  default     = "Standard_A4"
 }
 
 variable "image_publisher" {
   description = "name of the publisher of the image (az vm image list)"
-  default     = "Canonical"
+  default     = "MicrosoftWindowsServer"
 }
 
 variable "image_offer" {
   description = "the name of the offer (az vm image list)"
-  default     = "UbuntuServer"
+  default     = "WindowsServer"
 }
 
 variable "image_sku" {
   description = "image sku to apply (az vm image list)"
-  default     = "16.04-LTS"
+  default     = "2016-Datacenter"
 }
 
 variable "image_version" {
@@ -72,7 +72,7 @@ variable "image_version" {
 
 variable "admin_username" {
   description = "administrator user name"
-  default     = "vmadmin"
+  default     = "ladmin"
 }
 
 variable "admin_password" {
