@@ -34,14 +34,14 @@ resource "null_resource" "disk_prefix" {
   }
 }
 
-resource "vsphere_virtual_machine" "Win2016TestVM" {
+resource "vsphere_virtual_machine" "vSphereVM" {
   name             = "${var.vm_name}"
   resource_pool_id = "${data.vsphere_resource_pool.pool.id}"
   datastore_id     = "${data.vsphere_datastore.datastore.id}"
   folder           = "${var.vsphere_folder}"
   #count            = "${var.count}"
-  num_cpus         = 2
-  memory           = 4096
+  num_cpus         = "${var.cpu_count}"
+  memory           = "${var.memory}"
   annotation       = "${var.annotation}"
   guest_id         = "windows9Server64Guest"
 
@@ -81,38 +81,5 @@ resource "vsphere_virtual_machine" "Win2016TestVM" {
 
       #windows_sysprep_text = "${file("${path.module}/sysprep.xml")}"
     }
-  }
-
-  connection {
-    type     = "winrm"
-    user     = "Administrator"
-    password = "${var.admin_pw}"
-    insecure = true
-    https    = false
-    host     = "${var.ip_addresses[0]}"
-    port     = "5985"
-    timeout  = "10m"
-  }
-
-  provisioner "chef" {
-    environment             = "${var.chef_env}"
-    node_name               = "${var.vm_name}"
-    server_url              = "${var.chef_server_url}"
-    recreate_client         = true
-    user_name               = "${var.chef_user}"
-    user_key                = "${file("${var.chef_user}.pem")}"
-    secret_key              = "${file("data_sk.pem")}"
-    run_list                = ["${var.run_list}"]
-    fetch_chef_certificates = true
-    ssl_verify_mode         = "verify_none"
-    version                 = "13.6.4"
-    attributes_json = <<-EOF
-      {
-        "TestCB": {
-          "build_site":"${var.build_site}",
-          "build_num": "${var.build_num}"
-        }
-      }
-    EOF
   }
 }

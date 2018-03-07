@@ -5,45 +5,43 @@ variable "vsphere_user" {
 variable "vsphere_password" {}
 
 variable "vsphere_server" {
-  default = "llceozvc01.pemcoins.net"
+  default = ""
 }
 
 variable "datacenter" {
-  default = "Liberty Lake"
+  default = ""
 }
 
 variable "vsphere_domain" {
-  default = "pemcoins.net"
+  default = ""
 }
 
 variable "vsphere_resource_pool" {
-  default = "LibLake Development Cluster/Resources"
+  default = ""
 }
 
 variable "vsphere_datastore" {
-  default = "Development Datastore Cluster/VM-Dev-05"
+  default = ""
 }
 
 variable "vsphere_template" {
-  default = "Terraform2016"
+  default = ""
 }
 
 variable "vsphere_folder" {
-  default = "Development Environment/Operation Zone/Web Servers"
+  default = ""
 }
 
 variable "vsphere_network_label" {
-  default = "Dev_OZ_Vlan2171_Web"
+  default = ""
 }
 
 variable "ip_addresses" {
-  default = [
-    "10.2.171.60",
-  ]
+
 }
 
 variable "ip_gateway" {
-  default = "10.2.171.1"
+
 }
 
 variable "chef_env" {
@@ -55,8 +53,7 @@ variable "vm_name" {
 }
 
 variable "dns_servers" {
-  type    = "list"
-  default = ["10.1.11.21", "10.2.11.22", "10.2.11.21"]
+
 }
 
 variable "count" {
@@ -70,7 +67,7 @@ variable "private_key" {
 }
 
 variable "admin_pw" {
-  default = "NewPass!3"
+  default = ""
 }
 
 variable "annotation" {
@@ -78,15 +75,15 @@ variable "annotation" {
 }
 
 variable "run_list" {
-  default = ["recipe[TestCB::default]"]
+  default = [""]
 }
 
 variable "chef_user" {
-  default = "srv_devops_chef"
+  default = ""
 }
 
 variable "chef_server_url" {
-  default = "https://sememzap21.pemcoins.net/organizations/dev"
+  default = ""
 }
 
 variable "az_access_key" {
@@ -105,10 +102,10 @@ variable "az_blob_key" {
   default = ""
 }
 
-variable "build_site"{
-  default = ""
+variable "cpu_count" {
+   default =   "2"
 }
 
-variable "build_num" {
-   default =   ""
+variable "memory" {
+   default =   "4096"
 }
