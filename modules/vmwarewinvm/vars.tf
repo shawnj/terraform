@@ -60,12 +60,6 @@ variable "count" {
   default = "1"
 }
 
-variable "private_key" {
-  type        = "string"
-  description = "SSH private key file in .pem format corresponding to tectonic_vmware_ssh_authorized_key. If not provided, SSH agent will be used."
-  default     = "id_rsa"
-}
-
 variable "admin_pw" {
   default = ""
 }
