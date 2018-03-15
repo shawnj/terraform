@@ -1,4 +1,4 @@
-# Azure Windows VM
+# AWS Windows VM
 
 ## Requires
 
