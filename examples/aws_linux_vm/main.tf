@@ -10,13 +10,13 @@ variable "aws_secret_key" {
   default = ""
 }
 
-provider "aws" {
-  access_key = "${var.aws_access_key}"
-  secret_key = "${var.aws_secret_key}"
-  region     = "${var.region}"
+#provider "aws" {
+# access_key = "${var.aws_access_key}"
+#  secret_key = "${var.aws_secret_key}"
+#  region     = "${var.region}"
 
-  skip_credentials_validation = true
-}
+#  skip_credentials_validation = true
+#}
 
 data "aws_ami" "amazon_linux" {
   most_recent = true
@@ -52,6 +52,10 @@ module "vpc" {
   azs             = ["us-west-2a", "us-west-2b"]
   private_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
   public_subnets  = ["10.0.101.0/24", "10.0.102.0/24"]
+
+  aws_access_key = "${var.aws_access_key}"
+  aws_secret_key = "${var.aws.secret_key}"
+  region         = "us-west-2"
 
   #enable_nat_gateway = true
   #enable_vpn_gateway = true
