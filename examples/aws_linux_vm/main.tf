@@ -54,7 +54,7 @@ module "vpc" {
   public_subnets  = ["10.0.101.0/24", "10.0.102.0/24"]
 
   aws_access_key = "${var.aws_access_key}"
-  aws_secret_key = "${var.aws.secret_key}"
+  aws_secret_key = "${var.aws_secret_key}"
   region         = "us-west-2"
 
   #enable_nat_gateway = true
