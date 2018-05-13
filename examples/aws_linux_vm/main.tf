@@ -1,5 +1,5 @@
 variable "region" {
-  default = "us-west"
+  default = "us-west-2"
 }
 
 variable "aws_access_key" {
@@ -25,10 +25,13 @@ data "aws_ami" "amazon_linux" {
     name = "name"
 
     values = [
-      "Windows_Server-2016-English-Full-Base-2018.03.06",
+      "amzn-ami-hvm-2017.09.1.20180307-x86_64-ebs",
     ]
   }
-
+  filter {
+    name = "virtualization-type"
+    values = ["hvm"]
+  }
   filter {
     name = "owner-alias"
 
