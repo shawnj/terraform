@@ -28,10 +28,12 @@ data "aws_ami" "amazon_linux" {
       "amzn-ami-hvm-2017.09.1.20180307-x86_64-ebs",
     ]
   }
+
   filter {
-    name = "virtualization-type"
+    name   = "virtualization-type"
     values = ["hvm"]
   }
+
   filter {
     name = "owner-alias"
 
