@@ -10,6 +10,20 @@ variable "aws_secret_key" {
   default = ""
 }
 
+variable "public_key" {
+  default = ""
+}
+
+variable "vm_name" {
+  default = "TestVM"
+}
+
+
+resource "aws_key_pair" "deployer" {
+  key_name   = "deployer-key_${var.vm_name}"
+  public_key = "${var.public_key}"
+}
+
 provider "aws" {
  access_key = "${var.aws_access_key}"
   secret_key = "${var.aws_secret_key}"
@@ -70,7 +84,7 @@ module "security_group" {
   vpc_id      = "${module.vpc.vpc_id}"
 
   ingress_cidr_blocks = ["0.0.0.0/0"]
-  ingress_rules       = ["http-80-tcp", "all-icmp"]
+  ingress_rules       = ["http-80-tcp", "all-icmp", "ssh-tcp"]
   egress_rules        = ["all-all"]
 
   tags {
@@ -81,7 +95,7 @@ module "security_group" {
 module "ec2vm" {
   source = "github.com/shawnj/terraform//modules/awslinuxvm"
 
-  name           = "TestVM"
+  name           = "${var.vm_name}"
   instance_count = 1
 
   ami                    = "${data.aws_ami.amazon_linux.id}"
