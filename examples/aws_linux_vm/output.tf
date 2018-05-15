@@ -29,3 +29,7 @@ output "route_table" {
   value = "${module.vpc.private_route_table_ids[0]}"
 }
 
+output "public_ip" {
+  value = "${aws_eip.default.public_ip}"
+}
+
