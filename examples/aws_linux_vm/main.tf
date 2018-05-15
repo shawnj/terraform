@@ -18,10 +18,8 @@ variable "vm_name" {
   default = "TestVM"
 }
 
-
-resource "aws_key_pair" "deployer" {
-  key_name   = "deployer-key_${var.vm_name}"
-  public_key = "${var.public_key}"
+variable "keypair_name" {
+  default = "none"
 }
 
 provider "aws" {
@@ -39,7 +37,7 @@ data "aws_ami" "amazon_linux" {
     name = "name"
 
     values = [
-      "amzn-ami-hvm-2017.09.1.20180307-x86_64-ebs",
+      "amzn-ami-hvm-2018.03.0.20180412-x86_64-ebs",
     ]
   }
 
@@ -63,9 +61,8 @@ module "vpc" {
   name = "my-vpc"
   cidr = "10.0.0.0/16"
 
-  azs             = ["us-west-2a", "us-west-2b"]
-  private_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
-  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24"]
+  azs             = ["us-west-2a"]
+  private_subnets = ["10.0.1.0/24"]
 
   #enable_nat_gateway = true
   #enable_vpn_gateway = true
@@ -74,6 +71,41 @@ module "vpc" {
     Terraform   = "true"
     Environment = "dev"
   }
+}
+
+#variable "vpc_ready" {
+#  description = "Use this variable to ensure the Network ACL does not get created until the VPC is ready. This can help to work around a Terraform or AWS issue where trying to create certain resources, such as Network ACLs, before the VPC's Gateway and NATs are ready, leads to a huge variety of eventual consistency bugs. You should typically point this variable at the vpc_ready output from the Gruntwork VPCs."
+#}
+
+resource "null_resource" "vpc_ready" {
+  triggers {
+    # Explicitly wait on the passed in vpc_ready variable
+    vpc_ready = "${module.vpc.vpc_id}"
+  }
+}
+
+resource "null_resource" "instance_ready" {
+  triggers {
+    # Explicitly wait on the passed in vpc_ready variable
+    instance_ready = "${module.ec2vm.id[0]}"
+  }
+}
+
+resource "aws_internet_gateway" "gw" {
+  vpc_id = "${module.vpc.vpc_id}"
+  depends_on = ["null_resource.vpc_ready"]
+}
+
+resource "aws_eip" "default" {
+  instance = "${module.ec2vm.id[0]}"
+  vpc      = true
+  depends_on = ["aws_internet_gateway.gw","null_resource.instance_ready"]
+}
+
+resource "aws_route" "ssh_access" {
+  route_table_id         = "${module.vpc.private_route_table_ids[0]}"
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = "${aws_internet_gateway.gw.id}"
 }
 
 module "security_group" {
@@ -107,6 +139,8 @@ module "ec2vm" {
   aws_access_key = "${var.aws_access_key}"
   aws_secret_key = "${var.aws_secret_key}"
   region         = "us-west-2"
+
+  key_name = "${var.keypair_name}"
 
   tags {
     Environment = "dev"

@@ -10,13 +10,22 @@ output "private_subnets" {
   value       = ["${module.vpc.private_subnets}"]
 }
 
-output "public_subnets" {
-  description = "List of IDs of public subnets"
-  value       = ["${module.vpc.public_subnets}"]
-}
+#output "public_subnets" {
+#  description = "List of IDs of public subnets"
+#  value       = ["${module.vpc.public_subnets}"]
+#}
 
 # NAT gateways
 output "nat_public_ips" {
   description = "List of public Elastic IPs created for AWS NAT Gateway"
   value       = ["${module.vpc.nat_public_ips}"]
 }
+
+output "igw" {
+  value = "${aws_internet_gateway.gw.id}"
+}
+
+output "route_table" {
+  value = "${module.vpc.private_route_table_ids[0]}"
+}
+
