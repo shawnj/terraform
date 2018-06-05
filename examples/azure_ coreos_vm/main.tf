@@ -50,7 +50,7 @@ variable "rg_prefix" {
 }
 
 variable "hostname" {
-  default = "TestCoreOSVM1"
+  default = "TestCoreOSVM"
 }
 
 
@@ -71,6 +71,7 @@ resource "azurerm_virtual_network" "vnet" {
   location            = "${var.location}"
   address_space       = ["${var.address_space}"]
   resource_group_name = "${azurerm_resource_group.rg.name}"
+  depends_on = ["azurerm_resource_group.rg"]
 }
 
 resource "azurerm_subnet" "subnet" {
@@ -92,18 +93,44 @@ module "azure_coreos1" {
   admin_password   = "${var.admin_password}"
   disable_password = true
   ssh_key          = "keydata.key"
-  dns_name         = "${lower("${var.hostname}dns")}"
+  dns_name         = "${lower("${var.hostname}1dns")}"
 
   client_id       = "${var.client_id}"
   client_secret   = "${var.client_secret}"
   subscription_id = "${var.subscription_id}"
   tenant_id       = "${var.tenant_id}"
 
-  hostname       = "${var.hostname}"
+  hostname       = "${var.hostname}1"
   resource_group = "${azurerm_resource_group.rg.name}"
   location       = "${var.location}"
-  rg_prefix      = "${var.rg_prefix}"
+  rg_prefix      = "${var.rg_prefix}1"
 
   subnet_id = "${azurerm_subnet.subnet.id}"
 }
 
+module "azure_coreos2" {
+  source = "github.com/shawnj/terraform//modules/azurelinuxvm"
+
+  image_offer     = "CoreOS"
+  image_sku       = "Stable"
+  image_publisher = "CoreOS"
+  image_version   = "latest"
+
+  admin_username   = "${var.admin_username}"
+  admin_password   = "${var.admin_password}"
+  disable_password = true
+  ssh_key          = "keydata.key"
+  dns_name         = "${lower("${var.hostname}2dns")}"
+
+  client_id       = "${var.client_id}"
+  client_secret   = "${var.client_secret}"
+  subscription_id = "${var.subscription_id}"
+  tenant_id       = "${var.tenant_id}"
+
+  hostname       = "${var.hostname}2"
+  resource_group = "${azurerm_resource_group.rg.name}"
+  location       = "${var.location}"
+  rg_prefix      = "${var.rg_prefix}2"
+
+  subnet_id = "${azurerm_subnet.subnet.id}"
+}

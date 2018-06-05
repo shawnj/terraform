@@ -108,3 +108,4 @@ variable "disable_password" {
 variable "subnet_id" {
   default = "value"
 }
+
