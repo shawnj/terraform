@@ -1,30 +1,11 @@
-resource "azurerm_resource_group" "rg" {
-  name     = "${var.resource_group}"
-  location = "${var.location}"
-}
-
-resource "azurerm_virtual_network" "vnet" {
-  name                = "${var.virtual_network_name}"
-  location            = "${var.location}"
-  address_space       = ["${var.address_space}"]
-  resource_group_name = "${azurerm_resource_group.rg.name}"
-}
-
-resource "azurerm_subnet" "subnet" {
-  name                 = "${var.rg_prefix}subnet"
-  virtual_network_name = "${azurerm_virtual_network.vnet.name}"
-  resource_group_name  = "${azurerm_resource_group.rg.name}"
-  address_prefix       = "${var.subnet_prefix}"
-}
-
 resource "azurerm_network_interface" "nic" {
-  name                = "${var.rg_prefix}nic"
+  name                = "${var.hostname}nic"
   location            = "${var.location}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
 
   ip_configuration {
-    name                          = "${var.rg_prefix}ipconfig"
-    subnet_id                     = "${azurerm_subnet.subnet.id}"
+    name                          = "${var.hostname}ipconfig"
+    subnet_id                     = "${var.subnet_id}"
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = "${azurerm_public_ip.pip.id}"
   }

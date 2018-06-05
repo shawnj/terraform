@@ -104,3 +104,7 @@ variable "ssh_key" {
 variable "disable_password" {
   default = "false"
 }
+
+variable "subnet_id" {
+  default = "value"
+}
