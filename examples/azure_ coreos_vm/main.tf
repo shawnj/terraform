@@ -42,5 +42,5 @@ module "azure_coreos" {
   hostname       = "TestCoreOSVM"
   resource_group = "TestCore"
   location       = "westus"
-  rg_prefix      = "TC"
+  rg_prefix      = "tc"
 }
