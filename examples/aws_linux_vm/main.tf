@@ -22,6 +22,10 @@ variable "keypair_name" {
   default = "none"
 }
 
+variable "number_of_instances" {
+  default = 1
+}
+
 provider "aws" {
   access_key = "${var.aws_access_key}"
   secret_key = "${var.aws_secret_key}"
@@ -96,16 +100,77 @@ resource "aws_internet_gateway" "gw" {
   depends_on = ["null_resource.vpc_ready"]
 }
 
-resource "aws_eip" "default" {
-  instance = "${module.ec2vm.id[0]}"
-  vpc      = true
-  depends_on = ["aws_internet_gateway.gw","null_resource.instance_ready"]
-}
+## Elastic IP ##
+#resource "aws_eip" "default" {
+#  instance = "${module.ec2vm.id[0]}"
+#  vpc      = true
+#  depends_on = ["aws_internet_gateway.gw","null_resource.instance_ready"]
+#}
 
 resource "aws_route" "ssh_access" {
   route_table_id         = "${module.vpc.private_route_table_ids[0]}"
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = "${aws_internet_gateway.gw.id}"
+}
+
+######
+# ELB
+######
+module "elb" {
+  source  = "terraform-aws-modules/elb/aws"
+  version = "1.4.1"
+
+  name = "elb-example"
+
+  subnets         = ["${module.vpc.private_subnets[0]}"]
+  security_groups = ["${module.security_group.this_security_group_id}"]
+  internal        = false
+
+  listener = [
+    {
+      instance_port     = "80"
+      instance_protocol = "HTTP"
+      lb_port           = "80"
+      lb_protocol       = "HTTP"
+    },
+    {
+      instance_port     = "8080"
+      instance_protocol = "HTTP"
+      lb_port           = "8080"
+      lb_protocol       = "HTTP"
+    },
+    {
+      instance_port     = "22"
+      instance_protocol = "TCP"
+      lb_port           = "22"
+      lb_protocol       = "TCP"
+    },
+  ]
+
+  health_check = [
+    {
+      target              = "TCP:22"
+      interval            = 30
+      healthy_threshold   = 2
+      unhealthy_threshold = 2
+      timeout             = 5
+    },
+  ]
+
+  // Uncomment this section and set correct bucket name to enable access logging
+  //  access_logs = [
+  //    {
+  //      bucket = "my-access-logs-bucket"
+  //    },
+  //  ]
+
+  tags = {
+    Owner       = "user"
+    Environment = "dev"
+  }
+  # ELB attachments
+  number_of_instances = "${var.number_of_instances}"
+  instances           = ["${module.ec2vm.id}"]
 }
 
 module "security_group" {
@@ -128,7 +193,7 @@ module "ec2vm" {
   source = "github.com/shawnj/terraform//modules/awslinuxvm"
 
   name           = "${var.vm_name}"
-  instance_count = 1
+  instance_count = "${var.number_of_instances}"
 
   ami                    = "${data.aws_ami.amazon_linux.id}"
   instance_type          = "t2.micro"

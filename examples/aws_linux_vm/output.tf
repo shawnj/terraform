@@ -21,6 +21,10 @@ output "nat_public_ips" {
   value       = ["${module.vpc.nat_public_ips}"]
 }
 
+output "lb_dns_name" {
+  value = "${module.elb.this_elb_dns_name}"
+}
+
 output "igw" {
   value = "${aws_internet_gateway.gw.id}"
 }
@@ -29,7 +33,7 @@ output "route_table" {
   value = "${module.vpc.private_route_table_ids[0]}"
 }
 
-output "public_ip" {
-  value = "${aws_eip.default.public_ip}"
-}
+#output "public_ip" {
+#  value = "${aws_eip.default.public_ip}"
+#}
 
