@@ -1,7 +1,7 @@
 resource "azurerm_network_interface" "nic" {
   name                = "${var.hostname}nic"
   location            = "${var.location}"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
+  resource_group_name = "${var.resource_group}"
 
   ip_configuration {
     name                          = "${var.hostname}ipconfig"
@@ -14,7 +14,7 @@ resource "azurerm_network_interface" "nic" {
 resource "azurerm_public_ip" "pip" {
   name                         = "${var.rg_prefix}-ip"
   location                     = "${var.location}"
-  resource_group_name          = "${azurerm_resource_group.rg.name}"
+  resource_group_name          = "${var.resource_group}"
   public_ip_address_allocation = "Dynamic"
   domain_name_label            = "${var.dns_name}"
 }
@@ -23,7 +23,7 @@ resource "azurerm_public_ip" "pip" {
 resource "azurerm_storage_account" "stor" {
   name                     = "${var.rg_prefix}stor"
   location                 = "${var.location}"
-  resource_group_name      = "${azurerm_resource_group.rg.name}"
+  resource_group_name      = "${var.resource_group}"
   account_tier             = "${var.storage_account_tier}"
   account_replication_type = "${var.storage_replication_type}"
 }
@@ -31,7 +31,7 @@ resource "azurerm_storage_account" "stor" {
 resource "azurerm_managed_disk" "datadisk" {
   name                 = "${var.hostname}-datadisk"
   location             = "${var.location}"
-  resource_group_name  = "${azurerm_resource_group.rg.name}"
+  resource_group_name  = "${var.resource_group}"
   storage_account_type = "Standard_LRS"
   create_option        = "Empty"
   disk_size_gb         = "40"
@@ -40,7 +40,7 @@ resource "azurerm_managed_disk" "datadisk" {
 resource "azurerm_virtual_machine" "vm" {
   name                  = "${var.hostname}"
   location              = "${var.location}"
-  resource_group_name   = "${azurerm_resource_group.rg.name}"
+  resource_group_name   = "${var.resource_group}"
   vm_size               = "${var.vm_size}"
   network_interface_ids = ["${azurerm_network_interface.nic.id}"]
 
