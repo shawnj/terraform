@@ -40,7 +40,7 @@ resource "azurerm_public_ip" "pip" {
 
 
 resource "azurerm_storage_account" "stor" {
-  name                     = "${var.rg_prefix}-stor"
+  name                     = "${var.rg_prefix}stor"
   location                 = "${var.location}"
   resource_group_name      = "${azurerm_resource_group.rg.name}"
   account_tier             = "${var.storage_account_tier}"
@@ -64,7 +64,7 @@ resource "azurerm_virtual_machine" "vm" {
   network_interface_ids = ["${azurerm_network_interface.nic.id}"]
 
   delete_data_disks_on_termination = true
-  delete_os_disks_on_termination = true
+  delete_os_disk_on_termination = true
 
   storage_image_reference {
     publisher = "${var.image_publisher}"
