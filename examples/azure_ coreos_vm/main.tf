@@ -49,6 +49,12 @@ variable "rg_prefix" {
   default = "tc"
 }
 
+provider "azurerm" {
+   subscription_id = "${var.subscription_id}"
+   client_id       = "${var.client_id}"
+   client_secret   = "${var.client_secret}"
+   tenant_id       = "${var.tenant_id}"
+}
 
 resource "azurerm_resource_group" "rg" {
   name     = "${var.resource_group}"
@@ -59,13 +65,13 @@ resource "azurerm_virtual_network" "vnet" {
   name                = "${var.virtual_network_name}"
   location            = "${var.location}"
   address_space       = ["${var.address_space}"]
-  resource_group_name = "${var.resource_group}"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
 }
 
 resource "azurerm_subnet" "subnet" {
   name                 = "${var.rg_prefix}subnet"
   virtual_network_name = "${azurerm_virtual_network.vnet.name}"
-  resource_group_name  = "${var.resource_group}"
+  resource_group_name  = "${azurerm_resource_group.rg.name}"
   address_prefix       = "${var.subnet_prefix}"
 }
 
@@ -88,7 +94,7 @@ module "azure_coreos1" {
   tenant_id       = "${var.tenant_id}"
 
   hostname       = "TestCoreOSVM1"
-  resource_group = "${var.resource_group}"
+  resource_group = "${azurerm_resource_group.rg.name}"
   location       = "${var.location}"
   rg_prefix      = "${var.rg_prefix}"
 
