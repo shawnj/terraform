@@ -49,6 +49,11 @@ variable "rg_prefix" {
   default = "tc"
 }
 
+variable "hostname" {
+  default = "TestCoreOSVM1"
+}
+
+
 provider "azurerm" {
    subscription_id = "${var.subscription_id}"
    client_id       = "${var.client_id}"
@@ -87,13 +92,14 @@ module "azure_coreos1" {
   admin_password   = "${var.admin_password}"
   disable_password = true
   ssh_key          = "keydata.key"
+  dns_name         = "${lower("${var.hostname}dns")}"
 
   client_id       = "${var.client_id}"
   client_secret   = "${var.client_secret}"
   subscription_id = "${var.subscription_id}"
   tenant_id       = "${var.tenant_id}"
 
-  hostname       = "TestCoreOSVM1"
+  hostname       = "${var.hostname}"
   resource_group = "${azurerm_resource_group.rg.name}"
   location       = "${var.location}"
   rg_prefix      = "${var.rg_prefix}"
