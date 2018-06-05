@@ -32,7 +32,9 @@ module "azure_coreos" {
   image_version   = "latest"
 
   admin_username = "${var.admin_username}"
-  admin_password = "${var.admin_password}"
+  #admin_password = "${var.admin_password}"
+  disable_password = true
+  ssh_key = "keydata.key"
 
   client_id       = "${var.client_id}"
   client_secret   = "${var.client_secret}"

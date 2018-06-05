@@ -96,3 +96,11 @@ variable "subscription_id" {
 variable "tenant_id" {
   description = ""
 }
+
+variable "ssh_key" {
+  default = "keydata.key"
+}
+
+variable "disable_password" {
+  default = "false"
+}
