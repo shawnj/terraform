@@ -92,7 +92,7 @@ module "azure_coreos1" {
   admin_username   = "${var.admin_username}"
   admin_password   = "${var.admin_password}"
   disable_password = true
-  ssh_key          = "keydata.key"
+  ssh_key          = "${file("keydata.key")}"
   dns_name         = "${lower("${var.hostname}1dns")}"
 
   custom_data     = "${file("ignition.json")}"
@@ -121,7 +121,7 @@ module "azure_coreos2" {
   admin_username   = "${var.admin_username}"
   admin_password   = "${var.admin_password}"
   disable_password = true
-  ssh_key          = "keydata.key"
+  ssh_key          = "${file("keydata.key")}"
   dns_name         = "${lower("${var.hostname}2dns")}"
 
   client_id       = "${var.client_id}"
