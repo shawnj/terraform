@@ -6,7 +6,7 @@
       "files": [
         {
           "filesystem": "root",
-          "path": "/etc/coreos/docker-1.12",
+          "path": "/etc/coreos/docker-17.03.1-ce",
           "contents": {
             "source": "data:,yes"
           }

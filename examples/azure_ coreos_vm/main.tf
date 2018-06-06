@@ -111,7 +111,7 @@ module "azure_coreos1" {
 }
 
 module "azure_coreos2" {
-  source = "github.com/shawnj/terraform//modules/azurelinuxvm"
+  source = "github.com/shawnj/terraform//modules/azurelinuxvm"#
 
   image_offer     = "CoreOS"
   image_sku       = "Stable"
