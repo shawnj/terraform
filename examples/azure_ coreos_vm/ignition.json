@@ -1,0 +1,16 @@
+{
+    "ignition": {
+      "version": "2.1.0"
+    },
+    "storage": {
+      "files": [
+        {
+          "filesystem": "root",
+          "path": "/etc/coreos/docker-1.12",
+          "contents": {
+            "source": "data:,yes"
+          }
+        }
+      ]
+    }
+  }

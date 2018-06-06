@@ -95,6 +95,8 @@ module "azure_coreos1" {
   ssh_key          = "keydata.key"
   dns_name         = "${lower("${var.hostname}1dns")}"
 
+  custom_data     = "${file("ignition.json")}"
+
   client_id       = "${var.client_id}"
   client_secret   = "${var.client_secret}"
   subscription_id = "${var.subscription_id}"

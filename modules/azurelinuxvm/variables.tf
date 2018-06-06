@@ -109,3 +109,7 @@ variable "subnet_id" {
   default = "value"
 }
 
+variable "custom_data" {
+  default = ""
+}
+
