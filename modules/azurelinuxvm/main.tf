@@ -19,7 +19,6 @@ resource "azurerm_public_ip" "pip" {
   domain_name_label            = "${var.dns_name}"
 }
 
-
 resource "azurerm_storage_account" "stor" {
   name                     = "${var.rg_prefix}stor"
   location                 = "${var.location}"
@@ -45,7 +44,7 @@ resource "azurerm_virtual_machine" "vm" {
   network_interface_ids = ["${azurerm_network_interface.nic.id}"]
 
   delete_data_disks_on_termination = true
-  delete_os_disk_on_termination = true
+  delete_os_disk_on_termination    = true
 
   storage_image_reference {
     publisher = "${var.image_publisher}"
@@ -76,16 +75,17 @@ resource "azurerm_virtual_machine" "vm" {
     admin_password = "${var.admin_password}"
     custom_data    = "${var.custom_data}"
   }
-  
+
   os_profile_linux_config {
     disable_password_authentication = "${var.disable_password}"
+
     ssh_keys = {
       key_data = "${var.ssh_key}"
-      path = "/home/${var.admin_username}/.ssh/authorized_keys"
+      path     = "/home/${var.admin_username}/.ssh/authorized_keys"
     }
   }
 
-  tags{
-    environment = "staging"
+  tags {
+    environment = "${var.tags}"
   }
 }

@@ -9,12 +9,12 @@ variable "rg_prefix" {
 
 variable "hostname" {
   description = "VM name referenced also in storage-related names."
-  default = "TestVM"
+  default     = "TestVM"
 }
 
 variable "dns_name" {
   description = " Label for the Domain Name. Will be used to make up the FQDN. If a domain name label is specified, an A DNS record is created for the public IP in the Microsoft Azure DNS system."
-  default = "testdnsname"
+  default     = "testdnsname"
 }
 
 variable "location" {
@@ -113,3 +113,6 @@ variable "custom_data" {
   default = ""
 }
 
+variable "tags" {
+  default = "staging"
+}
