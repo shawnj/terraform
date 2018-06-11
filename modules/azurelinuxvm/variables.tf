@@ -120,3 +120,7 @@ variable "tags" {
 variable "availability_set" {
   default = ""
 }
+
+variable "backend_pool_ids" {
+  default = ""
+}

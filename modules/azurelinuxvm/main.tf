@@ -8,6 +8,7 @@ resource "azurerm_network_interface" "nic" {
     subnet_id                     = "${var.subnet_id}"
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = "${azurerm_public_ip.pip.id}"
+    load_balancer_backend_address_pools_ids = ["${var.backend_pool_ids}"]  
   }
 }
 
