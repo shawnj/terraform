@@ -116,3 +116,7 @@ variable "custom_data" {
 variable "tags" {
   default = "staging"
 }
+
+variable "availability_set" {
+  default = ""
+}
