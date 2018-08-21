@@ -67,7 +67,7 @@ resource "azurerm_virtual_machine" "vm" {
   delete_data_disks_on_termination = true
   delete_os_disks_on_termination = true
 
-  availability_set_id = "${var.availability_set}"
+  #availability_set_id = "${var.availability_set}"
   storage_image_reference {
     publisher = "${var.image_publisher}"
     offer     = "${var.image_offer}"
