@@ -1,22 +1,3 @@
-#resource "azurerm_resource_group" "rg" {
-#  name     = "${var.resource_group}"
-#  location = "${var.location}"
-#}
-
-#resource "azurerm_virtual_network" "vnet" {
-#  name                = "${var.virtual_network_name}"
-#  location            = "${var.location}"
-#  address_space       = ["${var.address_space}"]
-#  resource_group_name = "${azurerm_resource_group.rg.name}"
-#}
-
-#resource "azurerm_subnet" "subnet" {
-#  name                 = "${var.rg_prefix}subnet"
-#  virtual_network_name = "${azurerm_virtual_network.vnet.name}"
-#  resource_group_name  = "${azurerm_resource_group.rg.name}"
-#  address_prefix       = "${var.subnet_prefix}"
-#}
-
 resource "azurerm_network_interface" "nic" {
   name                = "${var.hostname}nic"
   location            = "${var.location}"
@@ -43,7 +24,7 @@ resource "azurerm_public_ip" "pip" {
 resource "azurerm_storage_account" "stor" {
   name                     = "${var.dns_name}stor"
   location                 = "${var.location}"
-  resource_group_name      = "${azurerm_resource_group.rg.name}"
+  resource_group_name      = "${var.resource_group}"
   account_tier             = "${var.storage_account_tier}"
   account_replication_type = "${var.storage_replication_type}"
 }
@@ -51,7 +32,7 @@ resource "azurerm_storage_account" "stor" {
 resource "azurerm_managed_disk" "datadisk" {
   name                 = "${var.hostname}-datadisk"
   location             = "${var.location}"
-  resource_group_name  = "${azurerm_resource_group.rg.name}"
+  resource_group_name  = "${var.resource_group}"
   storage_account_type = "Standard_LRS"
   create_option        = "Empty"
   disk_size_gb         = "40"
@@ -60,7 +41,7 @@ resource "azurerm_managed_disk" "datadisk" {
 resource "azurerm_virtual_machine" "vm" {
   name                  = "${var.rg_prefix}vm"
   location              = "${var.location}"
-  resource_group_name   = "${azurerm_resource_group.rg.name}"
+  resource_group_name   = "${var.resource_group}"
   vm_size               = "${var.vm_size}"
   network_interface_ids = ["${azurerm_network_interface.nic.id}"]
 
