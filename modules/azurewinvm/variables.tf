@@ -45,6 +45,9 @@ variable "storage_replication_type" {
   default     = "LRS"
 }
 
+variable "subnet_id" {
+  default = "value"
+}
 variable "vm_size" {
   description = "Specifies the size of the virtual machine."
   default     = "Standard_A4"
@@ -93,4 +96,12 @@ variable "subscription_id" {
 
 variable "tenant_id" {
   description = ""
+}
+
+variable "availability_set" {
+  default = ""
+}
+
+variable "backend_pool_ids" {
+  default = ""
 }
