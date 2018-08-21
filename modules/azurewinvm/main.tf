@@ -44,7 +44,7 @@ resource "azurerm_virtual_machine" "vm" {
   network_interface_ids = ["${azurerm_network_interface.nic.id}"]
 
   delete_data_disks_on_termination = true
-  delete_os_disks_on_termination = true
+  delete_os_disk_on_termination = true
 
   #availability_set_id = "${var.availability_set}"
   storage_image_reference {
