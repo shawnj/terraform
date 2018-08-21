@@ -20,15 +20,13 @@ resource "azurerm_public_ip" "pip" {
   domain_name_label            = "${var.dns_name}"
 }
 
-
 resource "azurerm_storage_account" "stor" {
-  name                     = "${var.dns_name}stor"
+  name                     = "${var.rg_prefix}stor"
   location                 = "${var.location}"
   resource_group_name      = "${var.resource_group}"
   account_tier             = "${var.storage_account_tier}"
   account_replication_type = "${var.storage_replication_type}"
 }
-
 resource "azurerm_managed_disk" "datadisk" {
   name                 = "${var.hostname}-datadisk"
   location             = "${var.location}"
