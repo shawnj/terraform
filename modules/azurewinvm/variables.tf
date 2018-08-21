@@ -46,7 +46,7 @@ variable "storage_replication_type" {
 }
 
 variable "subnet_id" {
-  default = "value"
+  default = ""
 }
 variable "vm_size" {
   description = "Specifies the size of the virtual machine."
